@@ -1,0 +1,262 @@
+{
+  "tomato_early_blight": {
+    "crop": "Tomate",
+    "name": "Alternariose (Early Blight)",
+    "description": "Maladie fongique causée par Alternaria solani, caractérisée par des taches brunes concentriques sur les feuilles âgées.",
+    "severity": "Modérée à élevée",
+    "causes": [
+      "Humidité élevée et rosée prolongée",
+      "Températures entre 24 et 29 °C",
+      "Culture dense limitant la circulation d'air",
+      "Résidus de culture infectés au sol"
+    ],
+    "treatment": [
+      "Retirer et détruire les feuilles infectées",
+      "Appliquer un fongicide à base de cuivre ou de mancozèbe",
+      "Alterner les matières actives pour éviter les résistances"
+    ],
+    "prevention": [
+      "Rotation des cultures sur 3 ans minimum",
+      "Arrosage au pied sans mouiller le feuillage",
+      "Espacement suffisant entre les plants",
+      "Utilisation de plants sains certifiés"
+    ]
+  },
+  "tomato_late_blight": {
+    "crop": "Tomate",
+    "name": "Mildiou (Late Blight)",
+    "description": "Maladie devastatrice causée par Phytophthora infestans, provoquant des taches huileuses et un flétrissement rapide.",
+    "severity": "Élevée",
+    "causes": [
+      "Conditions fraîches et humides",
+      "Présence de spores transportées par le vent",
+      "Plants voisins déjà infectés",
+      "Arrosage excessif du feuillage"
+    ],
+    "treatment": [
+      "Traitement préventif au cymoxanil ou mandipropamide",
+      "Éliminer immédiatement les plants très infectés",
+      "Réduire l'humidité autour des cultures"
+    ],
+    "prevention": [
+      "Surveillance météorologique et alertes mildiou",
+      "Paillage pour limiter les éclaboussures",
+      "Éviter les plantations en zones humides",
+      "Désinfection des outils entre les plants"
+    ]
+  },
+  "tomato_leaf_mold": {
+    "crop": "Tomate",
+    "name": "Moisissure des feuilles",
+    "description": "Maladie fongique due à Passalora fulva, visible par des taches jaune-vert sur la face supérieure des feuilles.",
+    "severity": "Modérée",
+    "causes": [
+      "Humidité relative supérieure à 85 %",
+      "Culture sous abri mal ventilée",
+      "Températures modérées (18-27 °C)",
+      "Variétés sensibles non résistantes"
+    ],
+    "treatment": [
+      "Améliorer la ventilation de la serre",
+      "Application de fongicides (chlorothalonil, azoxystrobine)",
+      "Suppression des feuilles atteintes en base"
+    ],
+    "prevention": [
+      "Choisir des variétés résistantes",
+      "Contrôler l'humidité en serre",
+      "Éviter l'excès d'azote",
+      "Rotation et nettoyage des structures"
+    ]
+  },
+  "tomato_healthy": {
+    "crop": "Tomate",
+    "name": "Plante saine",
+    "description": "Aucun symptôme de maladie détecté sur la tomate. Feuillage vert uniforme sans lésions visibles.",
+    "severity": "Aucune",
+    "causes": [],
+    "treatment": [],
+    "prevention": [
+      "Maintenir une bonne hygiène culturale",
+      "Surveillance régulière du verger",
+      "Fertilisation équilibrée",
+      "Irrigation adaptée aux stades de croissance"
+    ]
+  },
+  "potato_early_blight": {
+    "crop": "Pomme de terre",
+    "name": "Alternariose",
+    "description": "Infection fongique par Alternaria solani affectant feuilles et tubercules avec taches brunes en cible.",
+    "severity": "Modérée",
+    "causes": [
+      "Résidus de pomme de terre infectés",
+      "Alternance chaud-humide",
+      "Stress hydrique des plants",
+      "Sol pauvre en matière organique"
+    ],
+    "treatment": [
+      "Fongicides contact et systémiques",
+      "Destruction des fanes infectées",
+      "Récolte précoce si tubercules sains"
+    ],
+    "prevention": [
+      "Rotation avec cultures non hôtes",
+      "Utilisation de semences certifiées",
+      "Binage et buttage réguliers",
+      "Élimination des volunteer plants"
+    ]
+  },
+  "potato_late_blight": {
+    "crop": "Pomme de terre",
+    "name": "Mildiou",
+    "description": "Phytophthora infestans attaque feuilles, tiges et tubercules, entraînant pourriture brune.",
+    "severity": "Élevée",
+    "causes": [
+      "Spores aériennes en conditions humides",
+      "Tubercules infectés plantés",
+      "Températures fraîches (10-20 °C)",
+      "Proximité de cultures de tomate infectées"
+    ],
+    "treatment": [
+      "Traitements fongicides dès les premiers symptômes",
+      "Brûlage ou enfouissement profond des fanes",
+      "Séchage et tri des tubercules avant stockage"
+    ],
+    "prevention": [
+      "Plants de pomme de terre certifiés sains",
+      "Variétés résistantes au mildiou",
+      "Surveillance après pluies prolongées",
+      "Stockage sec et aéré des tubercules"
+    ]
+  },
+  "potato_healthy": {
+    "crop": "Pomme de terre",
+    "name": "Plante saine",
+    "description": "Pomme de terre sans signe de maladie. Feuillage vigoureux et tubercules non lésés.",
+    "severity": "Aucune",
+    "causes": [],
+    "treatment": [],
+    "prevention": [
+      "Rotation des cultures",
+      "Contrôle régulier des parcelles",
+      "Irrigation maîtrisée",
+      "Fertilisation adaptée au sol"
+    ]
+  },
+  "corn_common_rust": {
+    "crop": "Maïs",
+    "name": "Rouille commune",
+    "description": "Champignon Puccinia sorghi produisant des pustules brun-rouge sur les feuilles du maïs.",
+    "severity": "Modérée",
+    "causes": [
+      "Spores transportées par le vent",
+      "Humidité nocturne élevée",
+      "Variétés sensibles",
+      "Températures entre 16 et 25 °C"
+    ],
+    "treatment": [
+      "Fongicides triazoles en cas d'épidémie",
+      "Destruction des résidus infectés après récolte"
+    ],
+    "prevention": [
+      "Semis de variétés résistantes",
+      "Rotation avec non-hôtes",
+      "Date de semis optimisée",
+      "Éviter l'excès d'azote"
+    ]
+  },
+  "corn_gray_leaf_spot": {
+    "crop": "Maïs",
+    "name": "Tache grise des feuilles",
+    "description": "Cercospora zeae-maydis provoque des lésions rectangulaires grises alignées sur les nervures.",
+    "severity": "Modérée à élevée",
+    "causes": [
+      "Culture continue de maïs au même emplacement",
+      "Résidus infectés au sol",
+      "Humidité et chaleur modérées",
+      "Stress nutritionnel"
+    ],
+    "treatment": [
+      "Fongicides strobilurines ou triazoles",
+      "Labour profond des résidus"
+    ],
+    "prevention": [
+      "Rotation avec légumineuses",
+      "Hybrides tolérants",
+      "Gestion équilibrée des nutriments",
+      "Réduction des résidus en surface"
+    ]
+  },
+  "corn_northern_leaf_blight": {
+    "crop": "Maïs",
+    "name": "Helminthosporiose (tache des feuilles)",
+    "description": "Exserohilum turcicum forme de longues nécroses elliptiques gris-vert sur les feuilles.",
+    "severity": "Modérée à élevée",
+    "causes": [
+      "Spores issues de débris végétaux",
+      "Climat humide et tempéré",
+      "Densité de semis élevée",
+      "Variétés non résistantes"
+    ],
+    "treatment": [
+      "Traitements fongicides foliaires",
+      "Élimination des résidus de culture"
+    ],
+    "prevention": [
+      "Hybrides résistants",
+      "Rotation des cultures",
+      "Semis à densité modérée",
+      "Surveillance précoce en saison humide"
+    ]
+  },
+  "corn_healthy": {
+    "crop": "Maïs",
+    "name": "Plante saine",
+    "description": "Maïs sans symptôme pathologique visible. Feuilles vertes sans pustules ni nécroses.",
+    "severity": "Aucune",
+    "causes": [],
+    "treatment": [],
+    "prevention": [
+      "Bonnes pratiques agronomiques",
+      "Fertilisation équilibrée",
+      "Gestion de l'irrigation",
+      "Inspection régulière des parcelles"
+    ]
+  },
+  "pepper_bacterial_spot": {
+    "crop": "Poivron / Piment",
+    "name": "Tache bacterienne",
+    "description": "Xanthomonas spp. provoque des taches anguleuses brunes sur feuilles et fruits.",
+    "severity": "Modérée à élevée",
+    "causes": [
+      "Semences ou plants infectés",
+      "Éclaboussures d'eau et pluie",
+      "Outils non désinfectés",
+      "Températures chaudes et humides"
+    ],
+    "treatment": [
+      "Cuivre en prévention (bouillie bordelaise)",
+      "Suppression des parties très infectées",
+      "Antibiotiques agricoles autorisés si nécessaire"
+    ],
+    "prevention": [
+      "Semences certifiées traitées",
+      "Rotation des cultures",
+      "Éviter le travail des plants mouillés",
+      "Désinfection des serres et outils"
+    ]
+  },
+  "pepper_healthy": {
+    "crop": "Poivron / Piment",
+    "name": "Plante saine",
+    "description": "Poivron ou piment sans maladie détectée. Feuillage et fruits sans lésions.",
+    "severity": "Aucune",
+    "causes": [],
+    "treatment": [],
+    "prevention": [
+      "Plants sains et adaptés au climat local",
+      "Ventilation adéquate en serre",
+      "Arrosage localisé",
+      "Surveillance hebdomadaire"
+    ]
+  }
+}
