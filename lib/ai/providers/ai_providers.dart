@@ -5,6 +5,7 @@ import '../config/ai_config.dart';
 import '../repository/disease_repository.dart';
 import '../services/tensorflow_service.dart';
 import '../utils/image_processor.dart';
+import '../model/disease_info.dart';
 
 /// Configuration IA injectable (remplaçable en tests via [ProviderScope.overrides]).
 final aiConfigProvider = Provider<AiConfig>((ref) => const AiConfig());
@@ -47,3 +48,8 @@ final aiInitializationProvider = FutureProvider<void>((ref) async {
       );
   await ref.read(diseaseRepositoryProvider).load();
 });
+final diseaseInfoProvider = FutureProvider.family<DiseaseInfo, String>(
+  (ref, diseaseKey) async {
+    return ref.read(diseaseRepositoryProvider).getByKey(diseaseKey);
+  },
+);
