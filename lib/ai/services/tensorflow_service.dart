@@ -8,28 +8,33 @@ import '../model/prediction.dart';
 import '../utils/image_processor.dart';
 
 /// Contrat du moteur d'inférence TensorFlow Lite.
-///
-/// Implémentez cette interface pour remplacer facilement le backend IA
-/// (mock en tests, autre modèle, service cloud futur, etc.).
 abstract class TensorFlowService {
-  /// Charge le modèle et les labels depuis les assets.
   Future<void> initialize({AiConfig? config});
 
-  /// Exécute l'inférence et retourne une [Prediction] sans données de traitement.
   Future<Prediction> predict(InputTensor input);
 
-  /// Libère les ressources natives du modèle.
   void dispose();
 
-  /// Indique si le service est prêt pour l'inférence.
   bool get isInitialized;
 }
 
-/// Implémentation TensorFlow Lite utilisant [Interpreter].
+/// Implémentation TensorFlow Lite.
 class TfliteTensorFlowService implements TensorFlowService {
   Interpreter? _interpreter;
   Labels? _labels;
   AiConfig _config = const AiConfig();
+
+  /// Score minimal requis pour accepter une prédiction.
+  ///
+  /// Ajuste cette valeur après les tests :
+  /// - plus haut = plus strict ;
+  /// - plus bas = accepte davantage de résultats.
+  static const double _minimumConfidence = 0.75;
+
+  /// Écart minimal requis entre le premier et le deuxième résultat.
+  ///
+  /// Si les deux scores sont proches, le modèle hésite.
+  static const double _minimumConfidenceGap = 0.15;
 
   @override
   bool get isInitialized => _interpreter != null && _labels != null;
@@ -37,6 +42,7 @@ class TfliteTensorFlowService implements TensorFlowService {
   @override
   Future<void> initialize({AiConfig? config}) async {
     _config = config ?? _config;
+
     await disposeAsync();
 
     try {
@@ -45,24 +51,26 @@ class TfliteTensorFlowService implements TensorFlowService {
 
       final outputShape = _interpreter!.getOutputTensor(0).shape;
       final numClasses = outputShape.last;
+
       if (numClasses != _labels!.length) {
         throw TensorFlowException(
-          'Incompatibilité modèle/labels: le modèle produit $numClasses classes '
-          'mais labels.txt en contient ${_labels!.length}.',
+          'Incompatibilité modèle/labels : '
+          '$numClasses classes dans le modèle, '
+          '${_labels!.length} labels dans labels.txt.',
         );
       }
+
+      debugPrint('===== MODEL INFO =====');
+      debugPrint('INPUT: ${_interpreter!.getInputTensor(0).shape}');
+      debugPrint('INPUT TYPE: ${_interpreter!.getInputTensor(0).type}');
+      debugPrint('OUTPUT: ${_interpreter!.getOutputTensor(0).shape}');
+      debugPrint('OUTPUT TYPE: ${_interpreter!.getOutputTensor(0).type}');
+      debugPrint('LABELS: ${_labels!.length}');
+      debugPrint('======================');
     } on AiException {
       rethrow;
-    } on FlutterError catch (e) {
-      throw ModelNotFoundException(
-        'Modèle introuvable: ${_config.modelAssetPath}',
-        e,
-      );
     } catch (e) {
-      throw TensorFlowException(
-        'Erreur lors de l\'initialisation TensorFlow Lite.',
-        e,
-      );
+      throw TensorFlowException('Erreur init TensorFlow.', e);
     }
   }
 
@@ -70,39 +78,110 @@ class TfliteTensorFlowService implements TensorFlowService {
   Future<Prediction> predict(InputTensor input) async {
     if (!isInitialized) {
       throw const TensorFlowException(
-        'TensorFlowService non initialisé. Appelez initialize() d\'abord.',
+        'TensorFlowService non initialisé.',
       );
     }
 
     try {
       final numClasses = _labels!.length;
-      final output = List.generate(1, (_) => List.filled(numClasses, 0.0));
+
+      final output = List.generate(
+        1,
+        (_) => List<double>.filled(numClasses, 0.0),
+      );
 
       _interpreter!.run(input, output);
 
       final probabilities = output[0];
-      var maxIndex = 0;
-      var maxConfidence = probabilities[0];
 
-      for (var i = 1; i < probabilities.length; i++) {
-        if (probabilities[i] > maxConfidence) {
-          maxConfidence = probabilities[i];
-          maxIndex = i;
-        }
+      if (probabilities.isEmpty) {
+        throw const TensorFlowException(
+          'Le modèle n’a retourné aucune probabilité.',
+        );
       }
 
-      final label = _labels!.at(maxIndex);
+      final indexedScores = List.generate(
+        probabilities.length,
+        (index) => MapEntry<int, double>(
+          index,
+          probabilities[index].toDouble(),
+        ),
+      )..sort((a, b) => b.value.compareTo(a.value));
+
+      final bestIndex = indexedScores.first.key;
+      final bestConfidence = indexedScores.first.value;
+
+      final secondConfidence = indexedScores.length > 1
+          ? indexedScores[1].value
+          : 0.0;
+
+      final confidenceGap = bestConfidence - secondConfidence;
+
+      debugPrint('===== PROBABILITES CLASSEES =====');
+
+      for (final score in indexedScores) {
+        final label = _labels!.at(score.key);
+
+        debugPrint(
+          '${score.key + 1}. '
+          '${label.displayCrop} - ${label.displayDisease} '
+          '(${label.diseaseKey}) : '
+          '${(score.value * 100).toStringAsFixed(2)} %',
+        );
+      }
+
+      debugPrint('=================================');
+      debugPrint(
+        'MEILLEUR SCORE : '
+        '${(bestConfidence * 100).toStringAsFixed(2)} %',
+      );
+      debugPrint(
+        'DEUXIEME SCORE : '
+        '${(secondConfidence * 100).toStringAsFixed(2)} %',
+      );
+      debugPrint(
+        'ECART : '
+        '${(confidenceGap * 100).toStringAsFixed(2)} %',
+      );
+
+      final isLowConfidence = bestConfidence < _minimumConfidence;
+      final isAmbiguous = confidenceGap < _minimumConfidenceGap;
+
+      if (isLowConfidence || isAmbiguous) {
+        debugPrint(
+          'PREDICTION REJETEE : '
+          '${isLowConfidence ? "score trop faible" : "le modèle hésite"}.',
+        );
+
+        return Prediction(
+          crop: 'Plante non reconnue',
+          disease: 'Diagnostic non fiable',
+          confidence: bestConfidence,
+          diseaseKey: 'unknown',
+          date: DateTime.now(),
+        );
+      }
+
+      final label = _labels!.at(bestIndex);
+
+      debugPrint(
+        'PREDICTION ACCEPTEE => '
+        '${label.displayCrop} - ${label.displayDisease} '
+        '(${label.diseaseKey}) => '
+        '${(bestConfidence * 100).toStringAsFixed(2)} %',
+      );
 
       return Prediction(
         crop: label.displayCrop,
         disease: label.displayDisease,
-        confidence: maxConfidence.toDouble(),
+        confidence: bestConfidence,
         diseaseKey: label.diseaseKey,
         date: DateTime.now(),
       );
+    } on AiException {
+      rethrow;
     } catch (e) {
-      if (e is AiException) rethrow;
-      throw TensorFlowException('Erreur lors de l\'inférence TensorFlow Lite.', e);
+      throw TensorFlowException('Erreur inference TensorFlow.', e);
     }
   }
 
@@ -113,7 +192,6 @@ class TfliteTensorFlowService implements TensorFlowService {
     _labels = null;
   }
 
-  /// Variante async de [dispose] pour réinitialisation propre.
   Future<void> disposeAsync() async {
     dispose();
   }

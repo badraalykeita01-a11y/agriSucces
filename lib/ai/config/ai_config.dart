@@ -1,7 +1,3 @@
-/// Configuration centralisée du pipeline IA.
-///
-/// Permet de remplacer facilement le modèle, les labels ou les dimensions
-/// d'entrée via injection Riverpod ([aiConfigProvider]).
 class AiConfig {
   const AiConfig({
     this.modelAssetPath = 'assets/model/plant_disease.tflite',
@@ -10,31 +6,23 @@ class AiConfig {
     this.inputWidth = 224,
     this.inputHeight = 224,
     this.inputChannels = 3,
-    this.normalizeMean = 127.5,
-    this.normalizeStd = 127.5,
+    this.normalizeMean = 0.0,
+    this.normalizeStd = 255.0,
+    this.minimumConfidence = 0.60,
   });
 
-  /// Chemin asset du modèle TensorFlow Lite.
   final String modelAssetPath;
-
-  /// Chemin asset du fichier de labels (une classe par ligne).
   final String labelsAssetPath;
-
-  /// Chemin asset du fichier JSON des maladies.
   final String diseasesAssetPath;
 
-  /// Largeur attendue par le modèle.
   final int inputWidth;
-
-  /// Hauteur attendue par le modèle.
   final int inputHeight;
-
-  /// Nombre de canaux couleur (RGB = 3).
   final int inputChannels;
 
-  /// Moyenne utilisée pour la normalisation des pixels.
+  /// Transforme les pixels RGB de 0–255 vers 0–1.
   final double normalizeMean;
-
-  /// Écart-type utilisé pour la normalisation des pixels.
   final double normalizeStd;
+
+  /// En dessous de ce score, l'application ne doit pas annoncer un diagnostic.
+  final double minimumConfidence;
 }
