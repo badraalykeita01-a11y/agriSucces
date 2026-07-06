@@ -11,6 +11,7 @@ import '../../screens/home/home_screen.dart';
 import '../../screens/main/main_screen.dart';
 import '../../screens/profile/profile_screen.dart';
 import '../../screens/splash/splash_screen.dart';
+// import '../../features/history/presentation/screens/history_screen.dart';
 import 'app_routes.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -70,6 +71,11 @@ class AppRouter {
         path: AppRoutes.about,
         builder: (context, state) => const AboutScreen(),
       ),
+       GoRoute(
+  path: AppRoutes.history,
+  builder: (context, state) => const HistoryScreen(),
+),
     ],
   );
+ 
 }

@@ -1,262 +1,848 @@
 {
-  "tomato_early_blight": {
-    "crop": "Tomate",
-    "name": "Alternariose (Early Blight)",
-    "description": "Maladie fongique causée par Alternaria solani, caractérisée par des taches brunes concentriques sur les feuilles âgées.",
-    "severity": "Modérée à élevée",
+  "corn_cercospora_leaf_spot_gray_leaf_spot": {
+    "crop": "Maïs",
+    "name": "Cercosporiose / tache grise des feuilles",
+    "severity": "medium",
+    "description": "Maladie fongique qui provoque des lésions longues, grises ou brunâtres sur les feuilles. Elle peut réduire la photosynthèse et le rendement.",
     "causes": [
-      "Humidité élevée et rosée prolongée",
-      "Températures entre 24 et 29 °C",
-      "Culture dense limitant la circulation d'air",
-      "Résidus de culture infectés au sol"
+      "Humidité élevée et pluies fréquentes",
+      "Résidus de maïs infectés laissés dans le champ",
+      "Culture répétée de maïs au même endroit",
+      "Variété sensible"
     ],
+    "symptoms": [
+      "Taches rectangulaires grises ou brunes entre les nervures",
+      "Feuilles qui sèchent progressivement",
+      "Nombreuses lésions sur les feuilles basses puis hautes"
+    ],
+    "immediateActions": [
+      "Observer plusieurs feuilles pour confirmer les symptômes",
+      "Retirer les feuilles très atteintes si cela est possible",
+      "Éviter de travailler dans la parcelle quand les feuilles sont mouillées",
+      "Surveiller l'évolution après les pluies"
+    ],
+    "organicOptions": [
+      "Réduire les résidus infectés après récolte",
+      "Pratiquer la rotation avec une culture non hôte",
+      "Améliorer l'espacement et la circulation de l'air"
+    ],
+    "chemicalOptions": [
+      "Consulter un technicien agricole ou un vendeur agréé",
+      "Utiliser uniquement un produit homologué pour le maïs et respecter strictement son étiquette"
+    ],
+    "prevention": [
+      "Choisir des variétés tolérantes lorsque disponibles",
+      "Faire une rotation des cultures",
+      "Gérer les résidus de culture",
+      "Éviter les plantations trop denses"
+    ],
+    "whenToSeekHelp": [
+      "Si les taches progressent rapidement",
+      "Si une grande partie des feuilles est atteinte",
+      "Si la maladie apparaît avant ou pendant la formation des épis"
+    ],
+    "needsReview": true,
     "treatment": [
-      "Retirer et détruire les feuilles infectées",
-      "Appliquer un fongicide à base de cuivre ou de mancozèbe",
-      "Alterner les matières actives pour éviter les résistances"
-    ],
-    "prevention": [
-      "Rotation des cultures sur 3 ans minimum",
-      "Arrosage au pied sans mouiller le feuillage",
-      "Espacement suffisant entre les plants",
-      "Utilisation de plants sains certifiés"
-    ]
-  },
-  "tomato_late_blight": {
-    "crop": "Tomate",
-    "name": "Mildiou (Late Blight)",
-    "description": "Maladie devastatrice causée par Phytophthora infestans, provoquant des taches huileuses et un flétrissement rapide.",
-    "severity": "Élevée",
-    "causes": [
-      "Conditions fraîches et humides",
-      "Présence de spores transportées par le vent",
-      "Plants voisins déjà infectés",
-      "Arrosage excessif du feuillage"
-    ],
-    "treatment": [
-      "Traitement préventif au cymoxanil ou mandipropamide",
-      "Éliminer immédiatement les plants très infectés",
-      "Réduire l'humidité autour des cultures"
-    ],
-    "prevention": [
-      "Surveillance météorologique et alertes mildiou",
-      "Paillage pour limiter les éclaboussures",
-      "Éviter les plantations en zones humides",
-      "Désinfection des outils entre les plants"
-    ]
-  },
-  "tomato_leaf_mold": {
-    "crop": "Tomate",
-    "name": "Moisissure des feuilles",
-    "description": "Maladie fongique due à Passalora fulva, visible par des taches jaune-vert sur la face supérieure des feuilles.",
-    "severity": "Modérée",
-    "causes": [
-      "Humidité relative supérieure à 85 %",
-      "Culture sous abri mal ventilée",
-      "Températures modérées (18-27 °C)",
-      "Variétés sensibles non résistantes"
-    ],
-    "treatment": [
-      "Améliorer la ventilation de la serre",
-      "Application de fongicides (chlorothalonil, azoxystrobine)",
-      "Suppression des feuilles atteintes en base"
-    ],
-    "prevention": [
-      "Choisir des variétés résistantes",
-      "Contrôler l'humidité en serre",
-      "Éviter l'excès d'azote",
-      "Rotation et nettoyage des structures"
-    ]
-  },
-  "tomato_healthy": {
-    "crop": "Tomate",
-    "name": "Plante saine",
-    "description": "Aucun symptôme de maladie détecté sur la tomate. Feuillage vert uniforme sans lésions visibles.",
-    "severity": "Aucune",
-    "causes": [],
-    "treatment": [],
-    "prevention": [
-      "Maintenir une bonne hygiène culturale",
-      "Surveillance régulière du verger",
-      "Fertilisation équilibrée",
-      "Irrigation adaptée aux stades de croissance"
-    ]
-  },
-  "potato_early_blight": {
-    "crop": "Pomme de terre",
-    "name": "Alternariose",
-    "description": "Infection fongique par Alternaria solani affectant feuilles et tubercules avec taches brunes en cible.",
-    "severity": "Modérée",
-    "causes": [
-      "Résidus de pomme de terre infectés",
-      "Alternance chaud-humide",
-      "Stress hydrique des plants",
-      "Sol pauvre en matière organique"
-    ],
-    "treatment": [
-      "Fongicides contact et systémiques",
-      "Destruction des fanes infectées",
-      "Récolte précoce si tubercules sains"
-    ],
-    "prevention": [
-      "Rotation avec cultures non hôtes",
-      "Utilisation de semences certifiées",
-      "Binage et buttage réguliers",
-      "Élimination des volunteer plants"
-    ]
-  },
-  "potato_late_blight": {
-    "crop": "Pomme de terre",
-    "name": "Mildiou",
-    "description": "Phytophthora infestans attaque feuilles, tiges et tubercules, entraînant pourriture brune.",
-    "severity": "Élevée",
-    "causes": [
-      "Spores aériennes en conditions humides",
-      "Tubercules infectés plantés",
-      "Températures fraîches (10-20 °C)",
-      "Proximité de cultures de tomate infectées"
-    ],
-    "treatment": [
-      "Traitements fongicides dès les premiers symptômes",
-      "Brûlage ou enfouissement profond des fanes",
-      "Séchage et tri des tubercules avant stockage"
-    ],
-    "prevention": [
-      "Plants de pomme de terre certifiés sains",
-      "Variétés résistantes au mildiou",
-      "Surveillance après pluies prolongées",
-      "Stockage sec et aéré des tubercules"
-    ]
-  },
-  "potato_healthy": {
-    "crop": "Pomme de terre",
-    "name": "Plante saine",
-    "description": "Pomme de terre sans signe de maladie. Feuillage vigoureux et tubercules non lésés.",
-    "severity": "Aucune",
-    "causes": [],
-    "treatment": [],
-    "prevention": [
-      "Rotation des cultures",
-      "Contrôle régulier des parcelles",
-      "Irrigation maîtrisée",
-      "Fertilisation adaptée au sol"
+      "Surveiller la progression et retirer les feuilles très atteintes",
+      "Consulter un technicien agricole avant tout traitement"
     ]
   },
   "corn_common_rust": {
     "crop": "Maïs",
     "name": "Rouille commune",
-    "description": "Champignon Puccinia sorghi produisant des pustules brun-rouge sur les feuilles du maïs.",
-    "severity": "Modérée",
+    "severity": "medium",
+    "description": "Maladie fongique reconnaissable par de petites pustules brun-rouge ou orangées sur les feuilles de maïs.",
     "causes": [
       "Spores transportées par le vent",
       "Humidité nocturne élevée",
-      "Variétés sensibles",
-      "Températures entre 16 et 25 °C"
+      "Températures modérées",
+      "Variétés sensibles"
     ],
-    "treatment": [
-      "Fongicides triazoles en cas d'épidémie",
-      "Destruction des résidus infectés après récolte"
+    "symptoms": [
+      "Petites pustules orangées ou brun-rouge",
+      "Poudre visible sur les doigts après frottement",
+      "Jaunissement ou dessèchement des feuilles en cas d'attaque forte"
     ],
-    "prevention": [
-      "Semis de variétés résistantes",
-      "Rotation avec non-hôtes",
-      "Date de semis optimisée",
-      "Éviter l'excès d'azote"
-    ]
-  },
-  "corn_gray_leaf_spot": {
-    "crop": "Maïs",
-    "name": "Tache grise des feuilles",
-    "description": "Cercospora zeae-maydis provoque des lésions rectangulaires grises alignées sur les nervures.",
-    "severity": "Modérée à élevée",
-    "causes": [
-      "Culture continue de maïs au même emplacement",
-      "Résidus infectés au sol",
-      "Humidité et chaleur modérées",
-      "Stress nutritionnel"
+    "immediateActions": [
+      "Vérifier plusieurs plants dans la parcelle",
+      "Surveiller la progression des pustules",
+      "Éviter l'excès d'azote",
+      "Retirer les feuilles très atteintes dans les petites parcelles"
     ],
-    "treatment": [
-      "Fongicides strobilurines ou triazoles",
-      "Labour profond des résidus"
+    "organicOptions": [
+      "Éliminer les résidus très infectés après récolte",
+      "Favoriser une bonne nutrition équilibrée de la culture",
+      "Utiliser des variétés plus tolérantes"
+    ],
+    "chemicalOptions": [
+      "Consulter un technicien agricole si la maladie progresse fortement",
+      "Respecter l'étiquette d'un produit homologué pour le maïs"
     ],
     "prevention": [
-      "Rotation avec légumineuses",
-      "Hybrides tolérants",
-      "Gestion équilibrée des nutriments",
-      "Réduction des résidus en surface"
-    ]
-  },
-  "corn_northern_leaf_blight": {
-    "crop": "Maïs",
-    "name": "Helminthosporiose (tache des feuilles)",
-    "description": "Exserohilum turcicum forme de longues nécroses elliptiques gris-vert sur les feuilles.",
-    "severity": "Modérée à élevée",
-    "causes": [
-      "Spores issues de débris végétaux",
-      "Climat humide et tempéré",
-      "Densité de semis élevée",
-      "Variétés non résistantes"
+      "Choisir des variétés résistantes ou tolérantes",
+      "Éviter les excès d'engrais azotés",
+      "Surveiller les parcelles pendant les périodes humides",
+      "Pratiquer la rotation des cultures"
     ],
+    "whenToSeekHelp": [
+      "Si les pustules couvrent beaucoup de feuilles",
+      "Si les feuilles du haut sont atteintes avant la formation des épis",
+      "Si le rendement semble menacé"
+    ],
+    "needsReview": true,
     "treatment": [
-      "Traitements fongicides foliaires",
-      "Élimination des résidus de culture"
-    ],
-    "prevention": [
-      "Hybrides résistants",
-      "Rotation des cultures",
-      "Semis à densité modérée",
-      "Surveillance précoce en saison humide"
+      "Surveiller les plants et limiter les résidus infectés",
+      "Demander conseil à un technicien agricole si l'attaque est importante"
     ]
   },
   "corn_healthy": {
     "crop": "Maïs",
     "name": "Plante saine",
-    "description": "Maïs sans symptôme pathologique visible. Feuilles vertes sans pustules ni nécroses.",
-    "severity": "Aucune",
+    "severity": "low",
+    "description": "Aucun symptôme important de maladie n'a été détecté sur la photo.",
     "causes": [],
-    "treatment": [],
+    "symptoms": [],
+    "immediateActions": [
+      "Continuer à observer régulièrement les feuilles",
+      "Vérifier la présence d'insectes, de taches ou de jaunissement"
+    ],
+    "organicOptions": [
+      "Maintenir le sol propre et bien entretenu",
+      "Ajouter de la matière organique si nécessaire"
+    ],
+    "chemicalOptions": [],
     "prevention": [
-      "Bonnes pratiques agronomiques",
-      "Fertilisation équilibrée",
-      "Gestion de l'irrigation",
-      "Inspection régulière des parcelles"
+      "Maintenir une fertilisation équilibrée",
+      "Gérer correctement l'irrigation",
+      "Éviter les plantations trop serrées",
+      "Inspecter la parcelle chaque semaine"
+    ],
+    "whenToSeekHelp": [
+      "Si de nouvelles taches apparaissent",
+      "Si les feuilles jaunissent ou sèchent rapidement"
+    ],
+    "needsReview": true,
+    "treatment": []
+  },
+  "corn_northern_leaf_blight": {
+    "crop": "Maïs",
+    "name": "Helminthosporiose",
+    "severity": "high",
+    "description": "Maladie fongique qui crée de longues lésions gris-vert ou brunes sur les feuilles de maïs.",
+    "causes": [
+      "Temps humide et températures modérées",
+      "Résidus de maïs infectés",
+      "Variétés sensibles",
+      "Culture continue de maïs"
+    ],
+    "symptoms": [
+      "Longues taches elliptiques gris-vert",
+      "Lésions qui deviennent brunes",
+      "Dessèchement progressif des feuilles"
+    ],
+    "immediateActions": [
+      "Examiner plusieurs plants pour confirmer les longues lésions",
+      "Surveiller la vitesse de progression",
+      "Éviter de manipuler les plantes mouillées",
+      "Retirer les parties très atteintes dans les petites parcelles"
+    ],
+    "organicOptions": [
+      "Réduire les résidus infectés après récolte",
+      "Faire une rotation avec des cultures non hôtes",
+      "Améliorer l'aération de la parcelle"
+    ],
+    "chemicalOptions": [
+      "Demander l'avis d'un technicien agricole",
+      "Respecter l'étiquette d'un produit homologué pour le maïs"
+    ],
+    "prevention": [
+      "Utiliser des hybrides résistants",
+      "Faire une rotation des cultures",
+      "Éviter une densité de semis trop élevée",
+      "Surveiller tôt pendant la saison humide"
+    ],
+    "whenToSeekHelp": [
+      "Si les lésions atteignent les feuilles supérieures",
+      "Si la maladie progresse rapidement",
+      "Si la culture est proche de la floraison ou de la formation des épis"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Réduire les sources d'infection et surveiller l'évolution",
+      "Consulter un technicien agricole avant toute application de produit"
     ]
   },
-  "pepper_bacterial_spot": {
+  "pepper_bell_bacterial_spot": {
     "crop": "Poivron / Piment",
-    "name": "Tache bacterienne",
-    "description": "Xanthomonas spp. provoque des taches anguleuses brunes sur feuilles et fruits.",
-    "severity": "Modérée à élevée",
+    "name": "Tache bactérienne",
+    "severity": "high",
+    "description": "Maladie bactérienne qui provoque des taches brunes ou noires sur les feuilles et parfois sur les fruits.",
     "causes": [
       "Semences ou plants infectés",
-      "Éclaboussures d'eau et pluie",
+      "Pluie et éclaboussures d'eau",
       "Outils non désinfectés",
-      "Températures chaudes et humides"
+      "Temps chaud et humide"
     ],
-    "treatment": [
-      "Cuivre en prévention (bouillie bordelaise)",
-      "Suppression des parties très infectées",
-      "Antibiotiques agricoles autorisés si nécessaire"
+    "symptoms": [
+      "Petites taches foncées sur les feuilles",
+      "Taches anguleuses limitées par les nervures",
+      "Chute de feuilles dans les cas graves",
+      "Marques sur les fruits"
+    ],
+    "immediateActions": [
+      "Éviter de toucher les plants lorsqu'ils sont mouillés",
+      "Retirer les feuilles ou fruits très atteints",
+      "Désinfecter les outils après utilisation",
+      "Réduire l'arrosage sur le feuillage"
+    ],
+    "organicOptions": [
+      "Améliorer la circulation de l'air entre les plants",
+      "Arroser au pied plutôt que sur les feuilles",
+      "Éliminer les résidus de plants malades"
+    ],
+    "chemicalOptions": [
+      "Consulter un technicien agricole ou un vendeur agréé",
+      "Utiliser seulement un produit homologué et suivre son étiquette"
     ],
     "prevention": [
-      "Semences certifiées traitées",
-      "Rotation des cultures",
-      "Éviter le travail des plants mouillés",
-      "Désinfection des serres et outils"
+      "Utiliser des semences et plants sains",
+      "Faire une rotation des cultures",
+      "Désinfecter les outils",
+      "Éviter le travail des plants mouillés"
+    ],
+    "whenToSeekHelp": [
+      "Si les fruits commencent à être touchés",
+      "Si les feuilles tombent rapidement",
+      "Si plusieurs plants présentent les mêmes symptômes"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Retirer les parties très atteintes et limiter l'humidité sur le feuillage",
+      "Consulter un technicien agricole si la maladie se propage"
     ]
   },
-  "pepper_healthy": {
+  "pepper_bell_healthy": {
     "crop": "Poivron / Piment",
     "name": "Plante saine",
-    "description": "Poivron ou piment sans maladie détectée. Feuillage et fruits sans lésions.",
-    "severity": "Aucune",
+    "severity": "low",
+    "description": "Aucun symptôme important de maladie n'a été détecté sur le poivron ou le piment.",
     "causes": [],
-    "treatment": [],
+    "symptoms": [],
+    "immediateActions": [
+      "Continuer la surveillance des feuilles et des fruits",
+      "Vérifier régulièrement la présence d'insectes"
+    ],
+    "organicOptions": [
+      "Maintenir le sol propre autour des plants",
+      "Arroser au pied pour garder le feuillage sec"
+    ],
+    "chemicalOptions": [],
     "prevention": [
-      "Plants sains et adaptés au climat local",
-      "Ventilation adéquate en serre",
-      "Arrosage localisé",
-      "Surveillance hebdomadaire"
+      "Utiliser des plants sains",
+      "Éviter l'excès d'humidité",
+      "Désinfecter les outils",
+      "Retirer les feuilles mortes"
+    ],
+    "whenToSeekHelp": [
+      "Si des taches brunes ou noires apparaissent",
+      "Si les feuilles s'enroulent ou tombent"
+    ],
+    "needsReview": true,
+    "treatment": []
+  },
+  "potato_early_blight": {
+    "crop": "Pomme de terre",
+    "name": "Alternariose",
+    "severity": "medium",
+    "description": "Maladie fongique qui provoque souvent des taches brunes circulaires avec des anneaux concentriques sur les feuilles.",
+    "causes": [
+      "Temps chaud avec humidité",
+      "Résidus de culture infectés",
+      "Stress hydrique",
+      "Plants affaiblis"
+    ],
+    "symptoms": [
+      "Taches brunes en forme de cible",
+      "Jaunissement autour des taches",
+      "Atteinte d'abord sur les feuilles âgées"
+    ],
+    "immediateActions": [
+      "Retirer les feuilles fortement atteintes",
+      "Éviter de mouiller le feuillage lors de l'arrosage",
+      "Surveiller les plants voisins",
+      "Retirer les résidus malades du sol"
+    ],
+    "organicOptions": [
+      "Faire une rotation des cultures",
+      "Améliorer la santé du sol avec de la matière organique",
+      "Arroser régulièrement sans excès"
+    ],
+    "chemicalOptions": [
+      "Consulter un technicien agricole",
+      "Utiliser uniquement un produit homologué pour la pomme de terre et respecter l'étiquette"
+    ],
+    "prevention": [
+      "Utiliser des semences saines",
+      "Faire une rotation des cultures",
+      "Éviter le stress hydrique",
+      "Éliminer les résidus infectés"
+    ],
+    "whenToSeekHelp": [
+      "Si les taches augmentent rapidement",
+      "Si les feuilles sèchent avant la formation des tubercules",
+      "Si plusieurs zones du champ sont touchées"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Retirer les feuilles très atteintes et limiter l'humidité du feuillage",
+      "Consulter un technicien agricole si l'attaque progresse"
+    ]
+  },
+  "potato_healthy": {
+    "crop": "Pomme de terre",
+    "name": "Plante saine",
+    "severity": "low",
+    "description": "Aucun symptôme important de maladie n'a été détecté sur cette pomme de terre.",
+    "causes": [],
+    "symptoms": [],
+    "immediateActions": [
+      "Continuer à inspecter les feuilles chaque semaine",
+      "Vérifier les tiges et le sol autour des plants"
+    ],
+    "organicOptions": [
+      "Maintenir une bonne couverture du sol",
+      "Utiliser de la matière organique bien décomposée"
+    ],
+    "chemicalOptions": [],
+    "prevention": [
+      "Utiliser des semences saines",
+      "Faire une rotation des cultures",
+      "Gérer correctement l'irrigation",
+      "Éviter de laisser des résidus malades"
+    ],
+    "whenToSeekHelp": [
+      "Si des taches sombres apparaissent",
+      "Si le feuillage jaunit rapidement"
+    ],
+    "needsReview": true,
+    "treatment": []
+  },
+  "potato_late_blight": {
+    "crop": "Pomme de terre",
+    "name": "Mildiou",
+    "severity": "high",
+    "description": "Maladie grave qui peut se propager rapidement et provoquer des taches foncées, le flétrissement du feuillage et la pourriture des tubercules.",
+    "causes": [
+      "Temps frais et humide",
+      "Pluies prolongées",
+      "Plants ou tubercules déjà infectés",
+      "Présence de mildiou dans les parcelles voisines"
+    ],
+    "symptoms": [
+      "Taches vert foncé ou brunes irrégulières",
+      "Aspect humide ou huileux des lésions",
+      "Blanchiment possible sous les feuilles",
+      "Flétrissement rapide du feuillage"
+    ],
+    "immediateActions": [
+      "Isoler et retirer les plants très atteints",
+      "Éviter de déplacer des plants ou outils contaminés",
+      "Réduire l'humidité autour de la culture",
+      "Surveiller toute la parcelle immédiatement"
+    ],
+    "organicOptions": [
+      "Éliminer rapidement les plants fortement infectés",
+      "Éviter l'arrosage du feuillage",
+      "Améliorer le drainage et l'aération"
+    ],
+    "chemicalOptions": [
+      "Contacter rapidement un technicien agricole ou un vendeur agréé",
+      "Utiliser uniquement un produit homologué et suivre strictement l'étiquette"
+    ],
+    "prevention": [
+      "Planter des semences certifiées saines",
+      "Choisir des variétés plus tolérantes",
+      "Éviter les zones trop humides",
+      "Surveiller après les pluies prolongées"
+    ],
+    "whenToSeekHelp": [
+      "Dès les premiers symptômes",
+      "Si la maladie progresse après une pluie",
+      "Si les tubercules risquent d'être touchés"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Retirer rapidement les plants très atteints et réduire l'humidité",
+      "Demander conseil à un technicien agricole sans attendre"
+    ]
+  },
+  "tomato_bacterial_spot": {
+    "crop": "Tomate",
+    "name": "Tache bactérienne",
+    "severity": "high",
+    "description": "Maladie bactérienne provoquant de petites taches foncées sur les feuilles, les tiges et parfois les fruits de tomate.",
+    "causes": [
+      "Semences ou plants contaminés",
+      "Pluie et éclaboussures d'eau",
+      "Outils contaminés",
+      "Temps chaud et humide"
+    ],
+    "symptoms": [
+      "Petites taches sombres sur les feuilles",
+      "Bords jaunâtres autour des taches",
+      "Taches ou marques sur les fruits",
+      "Chute de feuilles si l'attaque est forte"
+    ],
+    "immediateActions": [
+      "Retirer les parties très atteintes",
+      "Désinfecter les outils après chaque utilisation",
+      "Arroser au pied et éviter de mouiller les feuilles",
+      "Éviter de manipuler les plants mouillés"
+    ],
+    "organicOptions": [
+      "Améliorer l'espacement entre les plants",
+      "Éliminer les résidus malades",
+      "Favoriser une bonne aération"
+    ],
+    "chemicalOptions": [
+      "Consulter un technicien agricole ou un vendeur agréé",
+      "Utiliser uniquement un produit homologué et respecter son étiquette"
+    ],
+    "prevention": [
+      "Utiliser des semences saines",
+      "Faire une rotation des cultures",
+      "Désinfecter les outils",
+      "Éviter l'arrosage sur le feuillage"
+    ],
+    "whenToSeekHelp": [
+      "Si les fruits sont touchés",
+      "Si la maladie progresse rapidement",
+      "Si plusieurs plants sont atteints"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Retirer les parties très atteintes et limiter les éclaboussures d'eau",
+      "Consulter un technicien agricole si l'attaque continue"
+    ]
+  },
+  "tomato_early_blight": {
+    "crop": "Tomate",
+    "name": "Alternariose",
+    "severity": "medium",
+    "description": "Maladie fongique qui provoque des taches brunes circulaires avec des anneaux concentriques, souvent sur les feuilles âgées.",
+    "causes": [
+      "Humidité élevée",
+      "Temps chaud",
+      "Résidus de culture infectés",
+      "Stress ou faiblesse des plants"
+    ],
+    "symptoms": [
+      "Taches brunes en forme de cible",
+      "Anneaux concentriques visibles",
+      "Jaunissement autour des taches",
+      "Atteinte des feuilles basses"
+    ],
+    "immediateActions": [
+      "Retirer les feuilles très atteintes",
+      "Arroser au pied sans mouiller le feuillage",
+      "Améliorer l'aération entre les plants",
+      "Ramasser les feuilles tombées"
+    ],
+    "organicOptions": [
+      "Pailler le sol pour limiter les éclaboussures",
+      "Faire une rotation des cultures",
+      "Utiliser du compost bien décomposé"
+    ],
+    "chemicalOptions": [
+      "Consulter un technicien agricole",
+      "Choisir seulement un produit homologué pour la tomate et respecter l'étiquette"
+    ],
+    "prevention": [
+      "Espacer suffisamment les plants",
+      "Arroser au pied",
+      "Éliminer les résidus infectés",
+      "Faire une rotation des cultures"
+    ],
+    "whenToSeekHelp": [
+      "Si les taches montent vers les feuilles supérieures",
+      "Si les fruits commencent à être touchés",
+      "Si la maladie progresse malgré les mesures prises"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Retirer les feuilles infectées et limiter l'humidité sur le feuillage",
+      "Demander conseil à un technicien agricole si la maladie s'étend"
+    ]
+  },
+  "tomato_healthy": {
+    "crop": "Tomate",
+    "name": "Plante saine",
+    "severity": "low",
+    "description": "Aucun symptôme important de maladie n'a été détecté sur cette tomate.",
+    "causes": [],
+    "symptoms": [],
+    "immediateActions": [
+      "Continuer à observer les feuilles, tiges et fruits",
+      "Retirer les feuilles mortes ou abîmées"
+    ],
+    "organicOptions": [
+      "Arroser au pied",
+      "Maintenir le sol propre et paillé si possible"
+    ],
+    "chemicalOptions": [],
+    "prevention": [
+      "Maintenir une bonne aération entre les plants",
+      "Éviter de mouiller le feuillage",
+      "Surveiller les insectes et les premières taches",
+      "Faire une fertilisation équilibrée"
+    ],
+    "whenToSeekHelp": [
+      "Si des taches apparaissent",
+      "Si les feuilles s'enroulent ou jaunissent rapidement",
+      "Si les fruits présentent des marques inhabituelles"
+    ],
+    "needsReview": true,
+    "treatment": []
+  },
+  "tomato_late_blight": {
+    "crop": "Tomate",
+    "name": "Mildiou",
+    "severity": "high",
+    "description": "Maladie grave qui provoque des taches foncées et humides sur les feuilles et peut détruire rapidement une culture de tomate.",
+    "causes": [
+      "Temps frais et humide",
+      "Pluies prolongées",
+      "Humidité élevée autour des plants",
+      "Plants voisins déjà infectés"
+    ],
+    "symptoms": [
+      "Taches vert foncé ou brunes irrégulières",
+      "Aspect humide ou huileux",
+      "Blanchiment possible sous les feuilles",
+      "Pourriture brune sur les fruits"
+    ],
+    "immediateActions": [
+      "Retirer immédiatement les feuilles ou plants très atteints",
+      "Éviter de composter les parties malades",
+      "Réduire l'humidité et améliorer l'aération",
+      "Désinfecter les outils"
+    ],
+    "organicOptions": [
+      "Arroser uniquement au pied",
+      "Éviter les éclaboussures sur les feuilles",
+      "Éliminer rapidement les plants très infectés"
+    ],
+    "chemicalOptions": [
+      "Consulter rapidement un technicien agricole ou un vendeur agréé",
+      "Utiliser seulement un produit homologué et respecter strictement son étiquette"
+    ],
+    "prevention": [
+      "Surveiller après les pluies",
+      "Espacer les plants",
+      "Éviter les zones mal drainées",
+      "Retirer les résidus de tomate infectés"
+    ],
+    "whenToSeekHelp": [
+      "Dès les premiers symptômes",
+      "Si les fruits commencent à pourrir",
+      "Si plusieurs plants sont touchés rapidement"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Retirer les parties très atteintes et réduire l'humidité",
+      "Consulter rapidement un technicien agricole"
+    ]
+  },
+  "tomato_leaf_mold": {
+    "crop": "Tomate",
+    "name": "Moisissure des feuilles",
+    "severity": "medium",
+    "description": "Maladie fongique souvent favorisée par une forte humidité, surtout sous serre. Elle provoque des zones jaunes sur le dessus des feuilles.",
+    "causes": [
+      "Humidité élevée",
+      "Mauvaise ventilation",
+      "Culture trop dense",
+      "Températures modérées"
+    ],
+    "symptoms": [
+      "Taches jaunes ou vert pâle sur le dessus des feuilles",
+      "Duvet brun-olive sous les feuilles",
+      "Dessèchement progressif des feuilles"
+    ],
+    "immediateActions": [
+      "Améliorer la ventilation",
+      "Réduire l'humidité autour des plants",
+      "Retirer les feuilles très atteintes",
+      "Éviter de mouiller les feuilles"
+    ],
+    "organicOptions": [
+      "Aérer davantage la serre ou la parcelle",
+      "Espacer les plants",
+      "Arroser au pied"
+    ],
+    "chemicalOptions": [
+      "Consulter un technicien agricole",
+      "Respecter l'étiquette d'un produit homologué pour la tomate"
+    ],
+    "prevention": [
+      "Choisir des variétés résistantes si disponibles",
+      "Contrôler l'humidité",
+      "Éviter l'excès d'azote",
+      "Maintenir une bonne circulation d'air"
+    ],
+    "whenToSeekHelp": [
+      "Si beaucoup de feuilles jaunissent",
+      "Si la maladie se propage dans la serre",
+      "Si les fruits risquent d'être exposés au soleil après chute des feuilles"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Améliorer la ventilation et retirer les feuilles fortement atteintes",
+      "Consulter un technicien agricole si l'attaque progresse"
+    ]
+  },
+  "tomato_septoria_leaf_spot": {
+    "crop": "Tomate",
+    "name": "Septoriose",
+    "severity": "medium",
+    "description": "Maladie fongique qui provoque de nombreuses petites taches rondes avec un centre gris ou clair sur les feuilles de tomate.",
+    "causes": [
+      "Pluie et humidité élevée",
+      "Éclaboussures de sol contaminé",
+      "Résidus de tomate infectés",
+      "Manque d'aération"
+    ],
+    "symptoms": [
+      "Petites taches rondes nombreuses",
+      "Centre gris ou clair avec bord foncé",
+      "Jaunissement puis chute des feuilles basses"
+    ],
+    "immediateActions": [
+      "Retirer les feuilles les plus atteintes",
+      "Ramasser les feuilles tombées",
+      "Arroser au pied",
+      "Éviter les éclaboussures de terre sur les feuilles"
+    ],
+    "organicOptions": [
+      "Pailler le sol",
+      "Espacer les plants",
+      "Faire une rotation des cultures"
+    ],
+    "chemicalOptions": [
+      "Consulter un technicien agricole",
+      "Utiliser uniquement un produit homologué et respecter son étiquette"
+    ],
+    "prevention": [
+      "Arroser au pied",
+      "Pailler le sol",
+      "Éliminer les résidus infectés",
+      "Faire une rotation des cultures"
+    ],
+    "whenToSeekHelp": [
+      "Si les feuilles tombent rapidement",
+      "Si les taches se propagent vers le haut du plant",
+      "Si la production de fruits diminue"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Retirer les feuilles atteintes, ramasser les feuilles tombées et arroser au pied",
+      "Consulter un technicien agricole si la maladie continue de s'étendre"
+    ]
+  },
+  "tomato_spider_mites_two-spotted_spider_mite": {
+    "crop": "Tomate",
+    "name": "Acariens (tétranyques)",
+    "severity": "medium",
+    "description": "Petits ravageurs qui piquent les feuilles et peuvent produire de fines toiles, surtout par temps chaud et sec.",
+    "causes": [
+      "Temps chaud et sec",
+      "Manque d'humidité",
+      "Présence de plants infestés à proximité",
+      "Déséquilibre des insectes auxiliaires"
+    ],
+    "symptoms": [
+      "Petits points jaunes sur les feuilles",
+      "Feuilles qui jaunissent ou bronzent",
+      "Fines toiles sous les feuilles",
+      "Dessèchement des feuilles en cas d'attaque forte"
+    ],
+    "immediateActions": [
+      "Inspecter le dessous des feuilles",
+      "Retirer les feuilles très infestées",
+      "Isoler les plants les plus touchés si possible",
+      "Éviter de déplacer les plants infestés près des plants sains"
+    ],
+    "organicOptions": [
+      "Rincer doucement le dessous des feuilles avec de l'eau",
+      "Favoriser les auxiliaires naturels lorsque possible",
+      "Maintenir une surveillance régulière"
+    ],
+    "chemicalOptions": [
+      "Consulter un technicien agricole ou un vendeur agréé",
+      "Utiliser uniquement un produit homologué contre les acariens et respecter l'étiquette"
+    ],
+    "prevention": [
+      "Inspecter régulièrement le dessous des feuilles",
+      "Éviter le stress hydrique",
+      "Éliminer les feuilles très infestées",
+      "Maintenir une bonne hygiène autour des plants"
+    ],
+    "whenToSeekHelp": [
+      "Si des toiles apparaissent sur beaucoup de feuilles",
+      "Si les plants jaunissent rapidement",
+      "Si l'infestation touche plusieurs plants"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Retirer les feuilles très infestées et inspecter le dessous des feuilles",
+      "Demander conseil à un technicien agricole si l'infestation progresse"
+    ]
+  },
+  "tomato_target_spot": {
+    "crop": "Tomate",
+    "name": "Tache cible",
+    "severity": "medium",
+    "description": "Maladie qui provoque des taches brunes souvent circulaires sur les feuilles et parfois sur les fruits.",
+    "causes": [
+      "Humidité élevée",
+      "Pluies fréquentes",
+      "Résidus de culture infectés",
+      "Aération insuffisante"
+    ],
+    "symptoms": [
+      "Taches brunes circulaires",
+      "Anneaux ou zones concentriques possibles",
+      "Jaunissement des feuilles",
+      "Marques sur les fruits dans certains cas"
+    ],
+    "immediateActions": [
+      "Retirer les feuilles très atteintes",
+      "Arroser au pied",
+      "Améliorer l'espacement entre les plants",
+      "Ramasser les feuilles tombées"
+    ],
+    "organicOptions": [
+      "Pailler le sol",
+      "Faire une rotation des cultures",
+      "Éviter l'humidité prolongée sur les feuilles"
+    ],
+    "chemicalOptions": [
+      "Consulter un technicien agricole",
+      "Respecter l'étiquette d'un produit homologué pour la tomate"
+    ],
+    "prevention": [
+      "Éviter de mouiller le feuillage",
+      "Maintenir une bonne aération",
+      "Retirer les résidus infectés",
+      "Faire une rotation des cultures"
+    ],
+    "whenToSeekHelp": [
+      "Si les taches atteignent beaucoup de feuilles",
+      "Si les fruits sont touchés",
+      "Si la maladie progresse rapidement"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Retirer les parties très atteintes et réduire l'humidité sur les feuilles",
+      "Consulter un technicien agricole si la maladie s'étend"
+    ]
+  },
+  "tomato_tomato_mosaic_virus": {
+    "crop": "Tomate",
+    "name": "Virus de la mosaïque de la tomate",
+    "severity": "high",
+    "description": "Maladie virale qui provoque des motifs verts et jaunes irréguliers sur les feuilles et peut réduire la croissance et la production.",
+    "causes": [
+      "Semences ou plants infectés",
+      "Contact entre plants",
+      "Outils ou mains contaminés",
+      "Certains insectes peuvent contribuer à la propagation"
+    ],
+    "symptoms": [
+      "Motifs de mosaïque vert clair et vert foncé",
+      "Feuilles déformées",
+      "Croissance ralentie",
+      "Fruits parfois déformés ou de petite taille"
+    ],
+    "immediateActions": [
+      "Isoler les plants suspects",
+      "Retirer les plants fortement atteints si nécessaire",
+      "Désinfecter les mains et les outils",
+      "Éviter de manipuler les plants sains après les plants suspects"
+    ],
+    "organicOptions": [
+      "Éliminer les plants fortement atteints",
+      "Contrôler les mauvaises herbes autour de la culture",
+      "Maintenir une bonne hygiène des outils"
+    ],
+    "chemicalOptions": [
+      "Il n'existe pas de traitement chimique direct contre un virus",
+      "Consulter un technicien agricole pour confirmer le diagnostic et gérer les vecteurs éventuels"
+    ],
+    "prevention": [
+      "Utiliser des semences et plants sains",
+      "Désinfecter les outils",
+      "Éviter de fumer ou manipuler du tabac près des plants",
+      "Retirer rapidement les plants suspects"
+    ],
+    "whenToSeekHelp": [
+      "Dès l'apparition de motifs de mosaïque sur plusieurs plants",
+      "Si les plants se déforment ou cessent de grandir",
+      "Si la production diminue fortement"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Isoler les plants suspects et désinfecter les outils",
+      "Demander confirmation à un technicien agricole"
+    ]
+  },
+  "tomato_tomato_yellow_leaf_curl_virus": {
+    "crop": "Tomate",
+    "name": "Virus de l'enroulement jaune de la tomate",
+    "severity": "high",
+    "description": "Maladie virale qui provoque le jaunissement et l'enroulement des feuilles, avec une croissance ralentie des plants.",
+    "causes": [
+      "Transmission par des insectes vecteurs comme les aleurodes",
+      "Plants infectés",
+      "Présence de mauvaises herbes hôtes",
+      "Introduction de plants contaminés"
+    ],
+    "symptoms": [
+      "Feuilles jaunes",
+      "Bords des feuilles enroulés vers le haut",
+      "Plants petits ou rabougris",
+      "Faible floraison et faible production"
+    ],
+    "immediateActions": [
+      "Isoler les plants suspects",
+      "Retirer les plants très atteints",
+      "Surveiller la présence de petits insectes blancs sous les feuilles",
+      "Désinfecter les outils"
+    ],
+    "organicOptions": [
+      "Utiliser des pièges adaptés pour surveiller les insectes",
+      "Retirer les mauvaises herbes autour de la parcelle",
+      "Protéger les jeunes plants avec des filets lorsque possible"
+    ],
+    "chemicalOptions": [
+      "Il n'existe pas de traitement chimique direct contre le virus",
+      "Consulter un technicien agricole pour la gestion des insectes vecteurs avec un produit homologué"
+    ],
+    "prevention": [
+      "Utiliser des plants sains",
+      "Surveiller les aleurodes",
+      "Éliminer les mauvaises herbes hôtes",
+      "Retirer rapidement les plants suspects"
+    ],
+    "whenToSeekHelp": [
+      "Si plusieurs plants présentent des feuilles jaunes et enroulées",
+      "Si les aleurodes sont nombreuses",
+      "Si la croissance ou la production s'arrête"
+    ],
+    "needsReview": true,
+    "treatment": [
+      "Isoler les plants suspects et surveiller les insectes vecteurs",
+      "Consulter un technicien agricole pour confirmer le virus et choisir une stratégie adaptée"
     ]
   }
 }

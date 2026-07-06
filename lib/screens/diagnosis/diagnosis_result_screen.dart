@@ -4,45 +4,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../ai/model/disease_info.dart';
-import '../../ai/model/prediction.dart';
-import '../../ai/providers/ai_providers.dart';
-import '../../core/routes/app_routes.dart';
-import '../../core/theme/app_colors.dart';
+import '../../../ai/model/disease_info.dart';
+import '../../../ai/model/prediction.dart';
+import '../../../ai/providers/ai_providers.dart';
+import '../../../core/routes/app_routes.dart';
+import '../../../core/theme/app_colors.dart';
+// import 'package:agrisucces/features/history/data/history_providers.dart';
+import '../../providers/history_provider.dart';
+
+final diseaseInfoProvider =
+    FutureProvider.family<DiseaseInfo, String>((ref, diseaseKey) async {
+  return ref.read(diseaseRepositoryProvider).getByKey(diseaseKey);
+});
 
 class DiagnosisResultScreen extends ConsumerWidget {
-  final Prediction prediction;
-  final File imageFile;
-
   const DiagnosisResultScreen({
     super.key,
     required this.prediction,
     required this.imageFile,
   });
 
-  double get _confidencePercent => prediction.confidence * 100;
+  final Prediction prediction;
+  final File imageFile;
 
-  String get _confidenceText => '${_confidencePercent.toStringAsFixed(1)} %';
+  String get _confidenceText =>
+      '${(prediction.confidence * 100).toStringAsFixed(1)} %';
 
-  bool get _isReliable => prediction.confidence >= 0.60;
-
-  bool get _isHealthy {
-    return prediction.diseaseKey.toLowerCase().contains('healthy');
+  Color _confidenceColor() {
+    if (prediction.confidence >= 0.85) return Colors.green;
+    if (prediction.confidence >= 0.70) return Colors.orange;
+    return Colors.red;
   }
 
-  Color get _confidenceColor {
-    if (prediction.confidence >= 0.80) return Colors.green;
-    if (prediction.confidence >= 0.60) return Colors.orange;
-    return Colors.red;
+  Color _severityColor(String severity) {
+    return switch (severity.toLowerCase()) {
+      'high' => Colors.red,
+      'medium' => Colors.orange,
+      'low' => Colors.green,
+      _ => Colors.grey,
+    };
+  }
+
+  String _severityLabel(String severity) {
+    return switch (severity.toLowerCase()) {
+      'high' => 'Élevée',
+      'medium' => 'Modérée',
+      'low' => 'Faible',
+      _ => 'Non précisée',
+    };
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (!_isReliable) {
-      return _LowConfidenceScreen(
+    if (!prediction.isReliable) {
+      return _UnknownResultScreen(
+        prediction: prediction,
         imageFile: imageFile,
-        confidenceText: _confidenceText,
-        confidenceColor: _confidenceColor,
       );
     }
 
@@ -59,185 +76,355 @@ class DiagnosisResultScreen extends ConsumerWidget {
         loading: () => const Center(
           child: CircularProgressIndicator(),
         ),
-        error: (error, stackTrace) => _ResultErrorView(
-          message: error.toString().replaceFirst('Exception: ', ''),
-        ),
-        data: (diseaseInfo) => _ResultContent(
+        error: (error, stackTrace) => _DataErrorScreen(
           prediction: prediction,
           imageFile: imageFile,
-          diseaseInfo: diseaseInfo,
-          confidenceText: _confidenceText,
-          confidenceColor: _confidenceColor,
-          isHealthy: _isHealthy,
+          error: error.toString(),
+        ),
+        data: (info) => SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+            children: [
+              _ImagePreview(imageFile: imageFile),
+              const SizedBox(height: 22),
+              Text(
+                'Diagnostic terminé',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.darkGreen,
+                    ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Résultat proposé par l’intelligence artificielle.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey.shade700,
+                  height: 1.4,
+                ),
+              ),
+              const SizedBox(height: 22),
+              _DiagnosisHeader(
+                prediction: prediction,
+                info: info,
+                severityColor: _severityColor(info.severity),
+                severityLabel: _severityLabel(info.severity),
+              ),
+              const SizedBox(height: 16),
+              _ConfidenceCard(
+                confidenceText: _confidenceText,
+                color: _confidenceColor(),
+              ),
+              const SizedBox(height: 18),
+              if (info.description.isNotEmpty)
+                _InfoCard(
+                  icon: Icons.description_outlined,
+                  title: 'Description',
+                  items: [info.description],
+                ),
+              if (info.causes.isNotEmpty)
+                _InfoCard(
+                  icon: Icons.help_outline,
+                  title: 'Causes possibles',
+                  items: info.causes,
+                ),
+              _InfoCard(
+                icon: Icons.visibility_outlined,
+                title: 'Symptômes à observer',
+                items: info.symptoms,
+              ),
+              _InfoCard(
+                icon: Icons.flash_on_outlined,
+                title: 'Actions immédiates',
+                items: info.immediateActions,
+              ),
+              _InfoCard(
+                icon: Icons.eco_outlined,
+                title: 'Options naturelles',
+                items: info.organicOptions,
+              ),
+              _InfoCard(
+                icon: Icons.science_outlined,
+                title: 'Options avec produit homologué',
+                items: info.chemicalOptions,
+                color: Colors.orange.withValues(alpha: 0.10),
+              ),
+              _InfoCard(
+                icon: Icons.shield_outlined,
+                title: 'Prévention',
+                items: info.prevention,
+              ),
+              _InfoCard(
+                icon: Icons.support_agent_outlined,
+                title: 'Quand demander de l’aide',
+                items: info.whenToSeekHelp,
+                color: Colors.red.withValues(alpha: 0.08),
+              ),
+              if (info.needsReview)
+                Card(
+                  elevation: 0,
+                  color: Colors.amber.withValues(alpha: 0.12),
+                  child: const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.info_outline),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Ces conseils sont fournis à titre indicatif. '
+                            'Avant tout traitement, vérifiez l’état réel de la plante '
+                            'et demandez conseil à un technicien agricole si nécessaire.',
+                            style: TextStyle(height: 1.4),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 26),
+              SizedBox(
+                height: 54,
+                child: FilledButton.icon(
+                  onPressed: () => context.go(AppRoutes.diagnosis),
+                  icon: const Icon(Icons.camera_alt_outlined),
+                  label: const Text('Faire un nouveau diagnostic'),
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 54,
+                child: OutlinedButton.icon(
+                  onPressed: () => context.go(AppRoutes.home),
+                  icon: const Icon(Icons.home_outlined),
+                  label: const Text('Retour à l’accueil'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-/// Ajoute ce provider dans `lib/ai/providers/ai_providers.dart`.
-///
-/// final diseaseInfoProvider = FutureProvider.family<DiseaseInfo, String>(
-///   (ref, diseaseKey) async {
-///     return ref.read(diseaseRepositoryProvider).getByKey(diseaseKey);
-///   },
-/// );
-class _ResultContent extends StatelessWidget {
-  final Prediction prediction;
-  final File imageFile;
-  final DiseaseInfo diseaseInfo;
-  final String confidenceText;
-  final Color confidenceColor;
-  final bool isHealthy;
+class _ImagePreview extends StatelessWidget {
+  const _ImagePreview({required this.imageFile});
 
-  const _ResultContent({
-    required this.prediction,
-    required this.imageFile,
-    required this.diseaseInfo,
-    required this.confidenceText,
-    required this.confidenceColor,
-    required this.isHealthy,
-  });
+  final File imageFile;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: AspectRatio(
-              aspectRatio: 4 / 3,
-              child: Image.file(
-                imageFile,
-                fit: BoxFit.cover,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: AspectRatio(
+        aspectRatio: 4 / 3,
+        child: Image.file(
+          imageFile,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+}
+
+class _DiagnosisHeader extends StatelessWidget {
+  const _DiagnosisHeader({
+    required this.prediction,
+    required this.info,
+    required this.severityColor,
+    required this.severityLabel,
+  });
+
+  final Prediction prediction;
+  final DiseaseInfo info;
+  final Color severityColor;
+  final String severityLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      color: AppColors.primaryGreen.withValues(alpha: 0.08),
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          children: [
+            const Icon(
+              Icons.eco_outlined,
+              size: 42,
+              color: AppColors.primaryGreen,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              prediction.crop,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              info.name,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: AppColors.darkGreen,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(height: 12),
+            Chip(
+              label: Text('Gravité : $severityLabel'),
+              avatar: Icon(
+                Icons.warning_amber_rounded,
+                color: severityColor,
+              ),
+              side: BorderSide.none,
+              backgroundColor: severityColor.withValues(alpha: 0.12),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ConfidenceCard extends StatelessWidget {
+  const _ConfidenceCard({
+    required this.confidenceText,
+    required this.color,
+  });
+
+  final String confidenceText;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 25,
+              backgroundColor: color.withValues(alpha: 0.12),
+              child: Icon(
+                Icons.analytics_outlined,
+                color: color,
               ),
             ),
-          ),
-          const SizedBox(height: 24),
-          Text(
-            isHealthy ? 'Plante en bonne santé' : 'Diagnostic terminé',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.darkGreen,
-                ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            isHealthy
-                ? 'Aucun symptôme important n’a été détecté sur cette photo.'
-                : 'Voici le résultat proposé par l’intelligence artificielle.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.grey.shade700,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: 24),
-          _DiseaseHeaderCard(
-            crop: diseaseInfo.crop,
-            diseaseName: diseaseInfo.name,
-            severity: diseaseInfo.severity,
-            isHealthy: isHealthy,
-          ),
-          const SizedBox(height: 16),
-          _ConfidenceCard(
-            confidenceText: confidenceText,
-            confidenceColor: confidenceColor,
-          ),
-          const SizedBox(height: 16),
-          _InfoSection(
-            icon: Icons.description_outlined,
-            title: 'Description',
-            child: Text(
-              diseaseInfo.description,
-              style: const TextStyle(height: 1.5),
-            ),
-          ),
-          if (!isHealthy && diseaseInfo.causes.isNotEmpty) ...[
-            const SizedBox(height: 14),
-            _InfoSection(
-              icon: Icons.help_outline,
-              title: 'Causes possibles',
-              child: _BulletList(items: diseaseInfo.causes),
-            ),
-          ],
-          if (!isHealthy && diseaseInfo.treatment.isNotEmpty) ...[
-            const SizedBox(height: 14),
-            _InfoSection(
-              icon: Icons.medical_services_outlined,
-              title: 'Actions recommandées',
-              child: _BulletList(items: diseaseInfo.treatment),
-            ),
-          ],
-          if (diseaseInfo.prevention.isNotEmpty) ...[
-            const SizedBox(height: 14),
-            _InfoSection(
-              icon: Icons.shield_outlined,
-              title: isHealthy ? 'Conseils pour garder la plante saine' : 'Prévention',
-              child: _BulletList(items: diseaseInfo.prevention),
-            ),
-          ],
-          const SizedBox(height: 18),
-          Card(
-            elevation: 0,
-            color: Colors.amber.withValues(alpha: 0.10),
-            child: const Padding(
-              padding: EdgeInsets.all(16),
-              child: Row(
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.info_outline),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'Ce résultat est une aide à la décision. Vérifiez toujours l’état réel de la plante et respectez les recommandations locales avant tout traitement.',
-                      style: TextStyle(height: 1.4),
-                    ),
+                  const Text(
+                    'Niveau de confiance',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    confidenceText,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: color,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ],
               ),
             ),
-          ),
-          const SizedBox(height: 28),
-          SizedBox(
-            height: 54,
-            child: FilledButton.icon(
-              onPressed: () => context.go(AppRoutes.diagnosis),
-              icon: const Icon(Icons.camera_alt_outlined),
-              label: const Text('Faire un nouveau diagnostic'),
-            ),
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            height: 54,
-            child: OutlinedButton.icon(
-              onPressed: () => context.go(AppRoutes.home),
-              icon: const Icon(Icons.home_outlined),
-              label: const Text('Retour à l’accueil'),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-class _LowConfidenceScreen extends StatelessWidget {
-  final File imageFile;
-  final String confidenceText;
-  final Color confidenceColor;
-
-  const _LowConfidenceScreen({
-    required this.imageFile,
-    required this.confidenceText,
-    required this.confidenceColor,
+class _InfoCard extends StatelessWidget {
+  const _InfoCard({
+    required this.icon,
+    required this.title,
+    required this.items,
+    this.color,
   });
+
+  final IconData icon;
+  final String title;
+  final List<String> items;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
+    if (items.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Card(
+        elevation: 0,
+        color: color,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(icon, color: AppColors.primaryGreen),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              ...items.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('•  '),
+                      Expanded(
+                        child: Text(
+                          item,
+                          style: const TextStyle(height: 1.4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _UnknownResultScreen extends StatelessWidget {
+  const _UnknownResultScreen({
+    required this.prediction,
+    required this.imageFile,
+  });
+
+  final Prediction prediction;
+  final File imageFile;
+
+  @override
+  Widget build(BuildContext context) {
+    final confidence =
+        '${(prediction.confidence * 100).toStringAsFixed(1)} %';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Résultat du diagnostic'),
@@ -247,66 +434,51 @@ class _LowConfidenceScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: AspectRatio(
-                aspectRatio: 4 / 3,
-                child: Image.file(
-                  imageFile,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(height: 28),
+            _ImagePreview(imageFile: imageFile),
+            const SizedBox(height: 26),
             const Icon(
-              Icons.photo_camera_back_outlined,
-              size: 58,
-              color: AppColors.primaryGreen,
+              Icons.search_off_outlined,
+              size: 72,
+              color: Colors.orange,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
             Text(
-              'Diagnostic non fiable',
+              'Image non reconnue avec assez de certitude',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.bold,
                     color: AppColors.darkGreen,
                   ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Text(
-              'La photo ne permet pas d’identifier la plante ou la maladie avec suffisamment de certitude.',
+              'L’application n’a pas pu identifier clairement la plante ou la maladie. '
+              'Le meilleur résultat obtenu avait une confiance de $confidence.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.grey.shade700,
                 height: 1.5,
               ),
             ),
+            const SizedBox(height: 24),
+            const _InfoCard(
+              icon: Icons.camera_alt_outlined,
+              title: 'Conseils pour une meilleure photo',
+              items: [
+                'Prenez la feuille ou la plante de près.',
+                'Utilisez une bonne lumière naturelle.',
+                'Évitez les images floues ou trop sombres.',
+                'Photographiez les taches, feuilles ou fruits concernés.',
+                'Essayez une autre photo sous un autre angle.',
+              ],
+            ),
             const SizedBox(height: 22),
-            _ConfidenceCard(
-              confidenceText: confidenceText,
-              confidenceColor: confidenceColor,
-            ),
-            const SizedBox(height: 16),
-            _InfoSection(
-              icon: Icons.tips_and_updates_outlined,
-              title: 'Comment prendre une meilleure photo ?',
-              child: const _BulletList(
-                items: [
-                  'Photographiez une seule feuille ou une zone malade de près.',
-                  'Utilisez une bonne lumière naturelle.',
-                  'Évitez les photos floues, sombres ou trop éloignées.',
-                  'Placez la feuille sur un fond simple si possible.',
-                  'Évitez de mélanger plusieurs cultures sur la même photo.',
-                ],
-              ),
-            ),
-            const SizedBox(height: 28),
             SizedBox(
               height: 54,
               child: FilledButton.icon(
                 onPressed: () => context.go(AppRoutes.diagnosis),
                 icon: const Icon(Icons.camera_alt_outlined),
-                label: const Text('Reprendre une photo'),
+                label: const Text('Réessayer avec une autre photo'),
               ),
             ),
             const SizedBox(height: 12),
@@ -325,265 +497,93 @@ class _LowConfidenceScreen extends StatelessWidget {
   }
 }
 
-class _DiseaseHeaderCard extends StatelessWidget {
-  final String crop;
-  final String diseaseName;
-  final String severity;
-  final bool isHealthy;
-
-  const _DiseaseHeaderCard({
-    required this.crop,
-    required this.diseaseName,
-    required this.severity,
-    required this.isHealthy,
+class _DataErrorScreen extends ConsumerWidget {
+  const _DataErrorScreen({
+    required this.prediction,
+    required this.imageFile,
+    required this.error,
   });
 
-  Color get _severityColor {
-    final value = severity.toLowerCase();
-
-    if (value.contains('élevée') || value.contains('elevee')) {
-      return Colors.red;
-    }
-
-    if (value.contains('modérée') || value.contains('moderee')) {
-      return Colors.orange;
-    }
-
-    return Colors.green;
-  }
+  final Prediction prediction;
+  final File imageFile;
+  final String error;
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: AppColors.primaryGreen.withValues(alpha: 0.08),
-      child: Padding(
-        padding: const EdgeInsets.all(18),
-        child: Column(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(20),
           children: [
-            Icon(
-              isHealthy
-                  ? Icons.health_and_safety_outlined
-                  : Icons.eco_outlined,
-              size: 42,
-              color: AppColors.primaryGreen,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              crop,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              diseaseName,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: AppColors.darkGreen,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 14),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 7,
-              ),
-              decoration: BoxDecoration(
-                color: _severityColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Text(
-                'Gravité : $severity',
-                style: TextStyle(
-                  color: _severityColor,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ConfidenceCard extends StatelessWidget {
-  final String confidenceText;
-  final Color confidenceColor;
-
-  const _ConfidenceCard({
-    required this.confidenceText,
-    required this.confidenceColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(18),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 25,
-              backgroundColor: confidenceColor.withValues(alpha: 0.12),
-              child: Icon(
-                Icons.analytics_outlined,
-                color: confidenceColor,
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Niveau de confiance',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    confidenceText,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: confidenceColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _InfoSection extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final Widget child;
-
-  const _InfoSection({
-    required this.icon,
-    required this.title,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: AppColors.primaryGreen),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: AppColors.darkGreen,
-                          fontWeight: FontWeight.w700,
-                        ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            child,
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BulletList extends StatelessWidget {
-  final List<String> items;
-
-  const _BulletList({
-    required this.items,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: items
-          .map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 5),
-                    child: Icon(
-                      Icons.check_circle_outline,
-                      size: 18,
-                      color: AppColors.primaryGreen,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      item,
-                      style: const TextStyle(height: 1.4),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )
-          .toList(),
-    );
-  }
-}
-
-class _ResultErrorView extends StatelessWidget {
-  final String message;
-
-  const _ResultErrorView({
-    required this.message,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+            _ImagePreview(imageFile: imageFile),
+            const SizedBox(height: 28),
             const Icon(
               Icons.error_outline,
-              size: 56,
+              size: 70,
               color: Colors.red,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Impossible d’afficher les informations',
+            Text(
+              'Informations de traitement indisponibles',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Le diagnostic a été effectué, mais les informations complémentaires '
+              'n’ont pas pu être chargées. Vérifie que la clé du diagnostic existe '
+              'dans assets/data/diseases.json.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
+                color: Colors.grey.shade700,
+                height: 1.4,
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              message,
-              textAlign: TextAlign.center,
+            const SizedBox(height: 24),
+            ExpansionTile(
+              title: const Text('Détails techniques'),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(error),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
-            FilledButton(
-              onPressed: () => context.go(AppRoutes.diagnosis),
-              child: const Text('Reprendre le diagnostic'),
+            SizedBox(
+              height: 54,
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () => context.go(AppRoutes.diagnosis),
+                icon: const Icon(Icons.camera_alt_outlined),
+                label: const Text('Faire un nouveau diagnostic'),
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 54,
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () async {
+                  final messenger = ScaffoldMessenger.of(context);
+
+                  
+
+                  ref.invalidate(diagnosisHistoryProvider);
+
+                  if (context.mounted) {
+                    messenger.showSnackBar(
+                      const SnackBar(
+                        content: Text('Diagnostic enregistré dans l’historique.'),
+                      ),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.bookmark_add_outlined),
+                label: const Text('Enregistrer dans l’historique'),
+              ),
             ),
           ],
         ),

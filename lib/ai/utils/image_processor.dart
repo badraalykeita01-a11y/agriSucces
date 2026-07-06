@@ -6,8 +6,8 @@ import 'package:image/image.dart' as img;
 import '../config/ai_config.dart';
 import '../exceptions/ai_exceptions.dart';
 
-/// Type alias pour un tenseur d'entrée TFLite : `[batch, height, width, channels]`.
-typedef InputTensor = List<List<List<List<double>>>>;
+/// Tenseur d'entrée TFLite : `[batch, height, width, channels]`.
+typedef InputTensor = List;
 
 /// Prétraite les images avant inférence TensorFlow Lite.
 ///
@@ -71,7 +71,22 @@ class ImageProcessor {
       interpolation: img.Interpolation.linear,
     );
 
-    final batch = List.generate(1, (_) {
+    if (_config.inputType == TensorInputType.uint8) {
+      return List.generate(1, (_) {
+        return List.generate(_config.inputHeight, (y) {
+          return List.generate(_config.inputWidth, (x) {
+            final pixel = resized.getPixel(x, y);
+            return [
+              pixel.r.toInt().clamp(0, 255),
+              pixel.g.toInt().clamp(0, 255),
+              pixel.b.toInt().clamp(0, 255),
+            ];
+          });
+        });
+      });
+    }
+
+    return List.generate(1, (_) {
       return List.generate(_config.inputHeight, (y) {
         return List.generate(_config.inputWidth, (x) {
           final pixel = resized.getPixel(x, y);
@@ -87,7 +102,5 @@ class ImageProcessor {
         });
       });
     });
-
-    return batch;
   }
 }

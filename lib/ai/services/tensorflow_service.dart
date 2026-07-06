@@ -24,18 +24,6 @@ class TfliteTensorFlowService implements TensorFlowService {
   Labels? _labels;
   AiConfig _config = const AiConfig();
 
-  /// Score minimal requis pour accepter une prédiction.
-  ///
-  /// Ajuste cette valeur après les tests :
-  /// - plus haut = plus strict ;
-  /// - plus bas = accepte davantage de résultats.
-  static const double _minimumConfidence = 0.75;
-
-  /// Écart minimal requis entre le premier et le deuxième résultat.
-  ///
-  /// Si les deux scores sont proches, le modèle hésite.
-  static const double _minimumConfidenceGap = 0.15;
-
   @override
   bool get isInitialized => _interpreter != null && _labels != null;
 
@@ -49,7 +37,10 @@ class TfliteTensorFlowService implements TensorFlowService {
       _interpreter = await Interpreter.fromAsset(_config.modelAssetPath);
       _labels = await Labels.fromAsset(_config.labelsAssetPath);
 
-      final outputShape = _interpreter!.getOutputTensor(0).shape;
+      final inputTensor = _interpreter!.getInputTensor(0);
+      final outputTensor = _interpreter!.getOutputTensor(0);
+
+      final outputShape = outputTensor.shape;
       final numClasses = outputShape.last;
 
       if (numClasses != _labels!.length) {
@@ -60,17 +51,22 @@ class TfliteTensorFlowService implements TensorFlowService {
         );
       }
 
-      debugPrint('===== MODEL INFO =====');
-      debugPrint('INPUT: ${_interpreter!.getInputTensor(0).shape}');
-      debugPrint('INPUT TYPE: ${_interpreter!.getInputTensor(0).type}');
-      debugPrint('OUTPUT: ${_interpreter!.getOutputTensor(0).shape}');
-      debugPrint('OUTPUT TYPE: ${_interpreter!.getOutputTensor(0).type}');
-      debugPrint('LABELS: ${_labels!.length}');
-      debugPrint('======================');
+      debugPrint('========== MODELE IA ==========');
+      debugPrint('INPUT SHAPE : ${inputTensor.shape}');
+      debugPrint('INPUT TYPE  : ${inputTensor.type}');
+      debugPrint('OUTPUT SHAPE: ${outputTensor.shape}');
+      debugPrint('OUTPUT TYPE : ${outputTensor.type}');
+      debugPrint('LABELS      : ${_labels!.length}');
+      debugPrint('SEUIL CONFIANCE : ${_config.minimumConfidence}');
+      debugPrint('ECART TOP 1/TOP 2 : ${_config.minimumConfidenceGap}');
+      debugPrint('================================');
     } on AiException {
       rethrow;
     } catch (e) {
-      throw TensorFlowException('Erreur init TensorFlow.', e);
+      throw TensorFlowException(
+        'Erreur lors de l’initialisation TensorFlow Lite.',
+        e,
+      );
     }
   }
 
@@ -100,88 +96,87 @@ class TfliteTensorFlowService implements TensorFlowService {
         );
       }
 
-      final indexedScores = List.generate(
+      final indexedProbabilities = List.generate(
         probabilities.length,
-        (index) => MapEntry<int, double>(
-          index,
-          probabilities[index].toDouble(),
+        (index) => _ClassScore(
+          index: index,
+          score: probabilities[index].toDouble(),
         ),
-      )..sort((a, b) => b.value.compareTo(a.value));
+      )..sort((a, b) => b.score.compareTo(a.score));
 
-      final bestIndex = indexedScores.first.key;
-      final bestConfidence = indexedScores.first.value;
+      final top1 = indexedProbabilities[0];
 
-      final secondConfidence = indexedScores.length > 1
-          ? indexedScores[1].value
-          : 0.0;
+      final top2 = indexedProbabilities.length > 1
+          ? indexedProbabilities[1]
+          : const _ClassScore(index: -1, score: 0.0);
 
-      final confidenceGap = bestConfidence - secondConfidence;
+      final confidenceGap = top1.score - top2.score;
 
-      debugPrint('===== PROBABILITES CLASSEES =====');
+      final bestLabel = _labels!.at(top1.index);
 
-      for (final score in indexedScores) {
-        final label = _labels!.at(score.key);
+      debugPrint('========== RESULTAT IA ==========');
+      debugPrint(
+        'TOP 1 : ${bestLabel.displayCrop} - '
+        '${bestLabel.displayDisease} '
+        '(${bestLabel.diseaseKey}) '
+        '= ${(top1.score * 100).toStringAsFixed(2)}%',
+      );
+
+      if (top2.index >= 0) {
+        final secondLabel = _labels!.at(top2.index);
 
         debugPrint(
-          '${score.key + 1}. '
-          '${label.displayCrop} - ${label.displayDisease} '
-          '(${label.diseaseKey}) : '
-          '${(score.value * 100).toStringAsFixed(2)} %',
+          'TOP 2 : ${secondLabel.displayCrop} - '
+          '${secondLabel.displayDisease} '
+          '(${secondLabel.diseaseKey}) '
+          '= ${(top2.score * 100).toStringAsFixed(2)}%',
         );
       }
 
+      debugPrint(
+        'ECART TOP 1 / TOP 2 : '
+        '${(confidenceGap * 100).toStringAsFixed(2)}%',
+      );
       debugPrint('=================================');
-      debugPrint(
-        'MEILLEUR SCORE : '
-        '${(bestConfidence * 100).toStringAsFixed(2)} %',
-      );
-      debugPrint(
-        'DEUXIEME SCORE : '
-        '${(secondConfidence * 100).toStringAsFixed(2)} %',
-      );
-      debugPrint(
-        'ECART : '
-        '${(confidenceGap * 100).toStringAsFixed(2)} %',
-      );
 
-      final isLowConfidence = bestConfidence < _minimumConfidence;
-      final isAmbiguous = confidenceGap < _minimumConfidenceGap;
+      final hasEnoughConfidence =
+          top1.score >= _config.minimumConfidence;
 
-      if (isLowConfidence || isAmbiguous) {
-        debugPrint(
-          'PREDICTION REJETEE : '
-          '${isLowConfidence ? "score trop faible" : "le modèle hésite"}.',
-        );
+      final hasEnoughGap =
+          confidenceGap >= _config.minimumConfidenceGap;
+
+      final isAccepted = hasEnoughConfidence && hasEnoughGap;
+
+      if (!isAccepted) {
+        debugPrint('PREDICTION REJETEE : image non reconnue ou incertaine.');
 
         return Prediction(
           crop: 'Plante non reconnue',
-          disease: 'Diagnostic non fiable',
-          confidence: bestConfidence,
+          disease: 'Diagnostic incertain',
+          confidence: top1.score,
           diseaseKey: 'unknown',
           date: DateTime.now(),
+          isAccepted: false,
         );
       }
 
-      final label = _labels!.at(bestIndex);
-
-      debugPrint(
-        'PREDICTION ACCEPTEE => '
-        '${label.displayCrop} - ${label.displayDisease} '
-        '(${label.diseaseKey}) => '
-        '${(bestConfidence * 100).toStringAsFixed(2)} %',
-      );
+      debugPrint('PREDICTION ACCEPTEE.');
 
       return Prediction(
-        crop: label.displayCrop,
-        disease: label.displayDisease,
-        confidence: bestConfidence,
-        diseaseKey: label.diseaseKey,
+        crop: bestLabel.displayCrop,
+        disease: bestLabel.displayDisease,
+        confidence: top1.score,
+        diseaseKey: bestLabel.diseaseKey,
         date: DateTime.now(),
+        isAccepted: true,
       );
     } on AiException {
       rethrow;
     } catch (e) {
-      throw TensorFlowException('Erreur inference TensorFlow.', e);
+      throw TensorFlowException(
+        'Erreur pendant l’inférence TensorFlow Lite.',
+        e,
+      );
     }
   }
 
@@ -195,4 +190,15 @@ class TfliteTensorFlowService implements TensorFlowService {
   Future<void> disposeAsync() async {
     dispose();
   }
+}
+
+/// Classe interne utilisée pour trier les probabilités.
+class _ClassScore {
+  const _ClassScore({
+    required this.index,
+    required this.score,
+  });
+
+  final int index;
+  final double score;
 }

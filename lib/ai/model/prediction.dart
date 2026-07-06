@@ -10,6 +10,7 @@ class Prediction {
     required this.confidence,
     required this.diseaseKey,
     required this.date,
+    required this.isAccepted,
   });
 
   /// Culture identifiée (ex. « Tomate »).
@@ -21,11 +22,23 @@ class Prediction {
   /// Score de confiance du modèle entre 0.0 et 1.0.
   final double confidence;
 
-  /// Clé unique pour croiser avec [DiseaseRepository] (ex. `tomato_early_blight`).
+  /// Clé unique pour croiser avec [DiseaseRepository].
   final String diseaseKey;
 
   /// Horodatage de la prédiction.
   final DateTime date;
+
+  /// Indique si le diagnostic a passé les seuils de confiance.
+  final bool isAccepted;
+
+  /// Diagnostic rejeté ou non reconnu.
+  bool get isUnknown => diseaseKey == 'unknown';
+
+  /// Plante saine reconnue avec confiance suffisante.
+  bool get isHealthy => !isUnknown && diseaseKey.endsWith('_healthy');
+
+  /// Diagnostic accepté et exploitable par l'interface.
+  bool get isReliable => isAccepted && !isUnknown;
 
   Prediction copyWith({
     String? crop,
@@ -33,6 +46,7 @@ class Prediction {
     double? confidence,
     String? diseaseKey,
     DateTime? date,
+    bool? isAccepted,
   }) {
     return Prediction(
       crop: crop ?? this.crop,
@@ -40,6 +54,7 @@ class Prediction {
       confidence: confidence ?? this.confidence,
       diseaseKey: diseaseKey ?? this.diseaseKey,
       date: date ?? this.date,
+      isAccepted: isAccepted ?? this.isAccepted,
     );
   }
 
@@ -49,6 +64,7 @@ class Prediction {
         'confidence': confidence,
         'diseaseKey': diseaseKey,
         'date': date.toIso8601String(),
+        'isAccepted': isAccepted,
       };
 
   factory Prediction.fromJson(Map<String, dynamic> json) {
@@ -58,10 +74,11 @@ class Prediction {
       confidence: (json['confidence'] as num).toDouble(),
       diseaseKey: json['diseaseKey'] as String,
       date: DateTime.parse(json['date'] as String),
+      isAccepted: json['isAccepted'] as bool? ?? true,
     );
   }
 
   @override
   String toString() =>
-      'Prediction(crop: $crop, disease: $disease, confidence: ${confidence.toStringAsFixed(2)}, diseaseKey: $diseaseKey)';
+      'Prediction(crop: $crop, disease: $disease, confidence: ${confidence.toStringAsFixed(2)}, diseaseKey: $diseaseKey, isAccepted: $isAccepted)';
 }

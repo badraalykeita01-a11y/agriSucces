@@ -1,19 +1,19 @@
-0 Corn___Cercospora_leaf_spot Gray_leaf_spot
-1 Corn___Common_rust_
-2 Corn___healthy
-3 Corn___Northern_Leaf_Blight
-4 Pepper_bell___Bacterial_spot
-5 Pepper_bell___healthy
-6 Potato___Early_blight
-7 Potato___healthy
-8 Potato___Late_blight
-9 Tomato___Bacterial_spot
-10 Tomato___Early_blight
-11 Tomato___healthy
-12 Tomato___Late_blight
-13 Tomato___Leaf_Mold
-14 Tomato___Septoria_leaf_spot
-15 Tomato___Spider_mites Two-spotted_spider_mite
-16 Tomato___Target_Spot
-17 Tomato___Tomato_mosaic_virus
-18 Tomato___Tomato_Yellow_Leaf_Curl_Virus
+Corn___Cercospora_leaf_spot Gray_leaf_spot
+Corn___Common_rust_
+Corn___healthy
+Corn___Northern_Leaf_Blight
+Pepper_bell___Bacterial_spot
+Pepper_bell___healthy
+Potato___Early_blight
+Potato___healthy
+Potato___Late_blight
+Tomato___Bacterial_spot
+Tomato___Early_blight
+Tomato___healthy
+Tomato___Late_blight
+Tomato___Leaf_Mold
+Tomato___Septoria_leaf_spot
+Tomato___Spider_mites Two-spotted_spider_mite
+Tomato___Target_Spot
+Tomato___Tomato_mosaic_virus
+Tomato___Tomato_Yellow_Leaf_Curl_Virus

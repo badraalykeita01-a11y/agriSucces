@@ -12,6 +12,9 @@ import 'package:go_router/go_router.dart';
 import '../../ai/providers/ai_providers.dart';
 import '../../core/routes/app_routes.dart';
 
+import '../../models/diagnosis_history_item.dart';
+import '../../providers/history_provider.dart';
+
 class DiagnosisScreen extends ConsumerStatefulWidget {
   const DiagnosisScreen({super.key});
 
@@ -170,15 +173,24 @@ class _DiagnosisScreenState extends ConsumerState<DiagnosisScreen> {
 
     final prediction = await classifier.classifyFromFile(_selectedImage!);
 
-    if (!mounted) return;
+final historyItem = DiagnosisHistoryItem(
+  id: DateTime.now().microsecondsSinceEpoch.toString(),
+  imagePath: _selectedImage!.path,
+  prediction: prediction,
+  createdAt: DateTime.now(),
+);
 
-    context.push(
-      AppRoutes.diagnosisResult,
-      extra: {
-        'prediction': prediction,
-        'imageFile': _selectedImage!,
-      },
-    );
+await ref.read(diagnosisHistoryProvider.notifier).add(historyItem);
+
+if (!mounted) return;
+
+context.push(
+  AppRoutes.diagnosisResult,
+  extra: {
+    'prediction': prediction,
+    'imageFile': _selectedImage!,
+  },
+);
   } catch (e) {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
