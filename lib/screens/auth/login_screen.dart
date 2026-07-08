@@ -8,6 +8,7 @@ import '../../core/theme/app_colors.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
+import '../../providers/user_profile_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -53,6 +54,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
 
       ref.read(currentUserProvider.notifier).state = user;
+      await ref.read(userProfileProvider.notifier).syncFromUser(user);
 
       if (mounted) {
         context.go(AppRoutes.home);
