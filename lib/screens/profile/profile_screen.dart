@@ -7,6 +7,10 @@ import '../../providers/user_profile_provider.dart';
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../core/routes/app_routes.dart';
+import '../../providers/auth_provider.dart';
 
 
 class ProfileScreen extends ConsumerWidget {
@@ -136,19 +140,57 @@ return Scaffold(
           ),
           const SizedBox(height: 28),
           SizedBox(
-            height: 50,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => EditProfileScreen(profile: profile),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.edit_outlined),
-              label: const Text('Modifier mon profil'),
-            ),
-          ),
+height: 50,
+child: ElevatedButton.icon(
+onPressed: () {
+Navigator.of(context).push(
+MaterialPageRoute(
+builder: (_) => EditProfileScreen(profile: profile),
+),
+);
+},
+icon: const Icon(Icons.edit_outlined),
+label: const Text('Modifier mon profil'),
+),
+),
+const SizedBox(height: 16),
+OutlinedButton.icon(
+onPressed: () async {
+final shouldLogout = await showDialog<bool>(
+context: context,
+builder: (dialogContext) {
+return AlertDialog(
+title: const Text('Se déconnecter'),
+content: const Text(
+'Voulez-vous vraiment vous déconnecter de votre compte ?',
+),
+actions: [
+TextButton(
+onPressed: () => Navigator.of(dialogContext).pop(false),
+child: const Text('Annuler'),
+),
+ElevatedButton(
+onPressed: () => Navigator.of(dialogContext).pop(true),
+child: const Text('Se déconnecter'),
+),
+],
+);
+},
+);
+
+if (shouldLogout != true || !context.mounted) return;
+
+await ref.read(authSessionProvider.notifier).logout();
+
+if (!context.mounted) return;
+
+context.go(AppRoutes.login);
+
+},
+icon: const Icon(Icons.logout),
+label: const Text('Se déconnecter'),
+),
+
         ],
       );
     },

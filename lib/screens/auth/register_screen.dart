@@ -57,7 +57,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         password: _passwordController.text,
       );
 
-      ref.read(currentUserProvider.notifier).state = user;
+      await ref.read(authSessionProvider.notifier).login(user);
       await ref.read(userProfileProvider.notifier).syncFromUser(user);
 
       if (mounted) {
