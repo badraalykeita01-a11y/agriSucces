@@ -9,7 +9,6 @@ import '../../../ai/model/prediction.dart';
 import '../../../ai/providers/ai_providers.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
-// import 'package:agrisucces/features/history/data/history_providers.dart';
 import '../../providers/history_provider.dart';
 
 final diseaseInfoProvider =
@@ -193,6 +192,17 @@ class DiagnosisResultScreen extends ConsumerWidget {
                   label: const Text('Faire un nouveau diagnostic'),
                 ),
               ),
+              const SizedBox(height: 12),
+              ElevatedButton.icon(
+                    onPressed: () {
+                      context.push(
+                        AppRoutes.chatbot,
+                        extra: info,
+                      );
+                    },
+                    icon: const Icon(Icons.chat_outlined),
+                    label: const Text('Demander conseil au chatbot'),
+                  ),
               const SizedBox(height: 12),
               SizedBox(
                 height: 54,

@@ -14,6 +14,9 @@ import '../../screens/main/main_screen.dart';
 import '../../screens/profile/profile_screen.dart';
 import 'app_routes.dart';
 import '../../screens/splash/splash_screen.dart';
+import 'package:agrisucces/screens/chatbot/chatbot_screen.dart';
+import '../../ai/model/disease_info.dart';
+
 
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -73,6 +76,17 @@ final extra = state.extra as Map<String, dynamic>;
     path: AppRoutes.about,
     builder: (context, state) => const AboutScreen(),
   ),
+  GoRoute(
+  path: AppRoutes.chatbot,
+  builder: (context, state) {
+    final diseaseInfo = state.extra as DiseaseInfo;
+
+    return ChatScreen(
+      currentDisease: diseaseInfo,
+    );
+  },
+),
+
 ],
 redirect: (context, state) {
   final container = ProviderScope.containerOf(context);
